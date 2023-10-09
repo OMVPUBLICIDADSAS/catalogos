@@ -30,7 +30,7 @@ export class UsersService {
     if (await this.usersModel.count() === 0) {
       const plainToHash = await hash('user001', Number(process.env.HASH));
       const reguser: RegisterUserDto ={
-        name: 'user', email:'user@user.user', password: plainToHash, rol: ['Q', 'P', 'W', 'U']
+        name: 'user', email:'user@user.user', password: plainToHash, rol: ['Q', 'P', 'W', 'U', 'C']
       }
       this.usersModel.create(reguser);
       throw new HttpException('NEW_USER_user@user.user_PASS_user001', 452);
