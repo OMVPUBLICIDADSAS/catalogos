@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateGeneralDto } from './dto/create-general.dto';
+// import { CreateGeneralDto } from './dto/create-general.dto';
 import { UpdateGeneralDto } from './dto/update-general.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { General } from './schemas/general.schema';

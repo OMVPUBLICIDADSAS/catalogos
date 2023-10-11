@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards } from '@nestjs/common';
+import { Controller, Get, Body, Put, UseGuards } from '@nestjs/common';
 import { GeneralService } from './general.service';
-import { CreateGeneralDto } from './dto/create-general.dto';
+// import { CreateGeneralDto } from './dto/create-general.dto';
 import { UpdateGeneralDto } from './dto/update-general.dto';
 import { Roles } from 'src/users/roles.decorator';
 import { RolesGuard } from 'src/users/roles.guard';

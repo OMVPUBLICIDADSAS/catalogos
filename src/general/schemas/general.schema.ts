@@ -8,28 +8,28 @@ export type GeneralDocument = HydratedDocument<General>;
 export class General {
 
   @Prop()
-  id: string;
-
-  @Prop()
-  quote_condition: string;
-
-  @Prop()
-  p_iva: number;
+  address?: string;
 
   @Prop()
   consecutive: number;
 
   @Prop()
-  name: string;
+  id: string;
 
   @Prop()
-  site: string;
+  name?: string;
 
   @Prop()
-  phone: string;
+  p_iva: number;
 
   @Prop()
-  address: string;
+  phone?: string;
+
+  @Prop()
+  quote_condition: string;
+
+  @Prop()
+  site?: string;
 
 }
 

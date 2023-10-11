@@ -1,28 +1,35 @@
 import { IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreateGeneralDto {
+    
     @IsString()
     @IsOptional()
-    quote_condition: string;
-
-    @IsNumber()
-    @IsOptional()
-    p_iva: number;
+    address: string;
 
     @IsNumber()
     @IsOptional()
     consecutive: number;
 
+    @IsString()
+    @IsOptional()
+    id: string;
+
+    @IsString()
     @IsOptional()
     name: string;
 
+    @IsNumber()
     @IsOptional()
-    site: string;
+    p_iva: number;
 
     @IsOptional()
     phone: string;
 
+    @IsString()
     @IsOptional()
-    address: string;
+    quote_condition: string;
+    
+    @IsOptional()
+    site: string;
 
 }
