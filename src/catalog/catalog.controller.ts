@@ -28,6 +28,15 @@ export class CatalogController {
     return this.catalogService.findAll();
   }
 
+  @Get('txtdatabs')
+  txtdatabs(@Res() res) {
+    try {
+      const apath = join(__dirname, 'databs.txt');
+      return res.sendFile(apath);
+    } catch (e) {
+    }
+  }
+
   @Get(':imagename')
   getImageByName(@Param('imagename') imagename, @Res() res): Observable<object> {
     // console.log(join('./images', imagename));
@@ -51,10 +60,10 @@ export class CatalogController {
     /*
     if (!fs.existsSync(join(__dirname + this.IMAGEFOLDER))) fs.mkdirSync(join(__dirname + this.IMAGEFOLDER));
     */
-    
+
     fs.rmSync(join(__dirname + this.IMAGEFOLDER), { recursive: true, force: true });
     fs.mkdirSync(join(__dirname + this.IMAGEFOLDER));
-    
+
 
     let apath = '';
     files.forEach(async image => {
@@ -75,28 +84,6 @@ export class CatalogController {
     })
     return { status: 200, message: apath }
   }
-
-/*
-  @Post('images2dtbase')
-  @UseInterceptors(FilesInterceptor('files', 10000, {
-    storage: diskStorage({
-      destination: 'images/',
-      filename: function (req, file, cb) { cb(null, file.originalname) }
-    })
-  }))
-  uploadFiles(@UploadedFiles() files: Array<Express.Multer.File>) {
-
-    // files.forEach(image => {
-    // const apath = join(__dirname, '..', '..', image.path);
-    // const data = fs.readFileSync(apath);
-    // fs.writeFileSync(apath, data);
-    // })
-
-
-    return { status: 200, message: 'ok' }
-  }
-  */
-
 
   @Roles('P')
   @UseGuards(RolesGuard)
@@ -166,6 +153,16 @@ export class CatalogController {
       }
       // get worksheet, read rows, etc
     });
+    // Write to txt
+
+    const content = JSON.stringify(itemArray);
+    const apath = join(__dirname, 'databs.txt');
+    fs.writeFile(apath, content, err => {
+      if (err) {
+        console.error(err);
+      }
+    });
+
     return this.catalogService.excel2Mongodb(itemArray);
   }
 

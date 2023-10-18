@@ -15,7 +15,6 @@ import { GeneralModule } from './general/general.module';
     ConfigModule.forRoot({ isGlobal: true, }),
     MongooseModule.forRoot(
       process.env.MONGO_URI
-      // `mongodb+srv://${process.env.MONGO_USER}@cluster0.a6otiyi.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`,
     ),
 
     MailerModule.forRoot({
