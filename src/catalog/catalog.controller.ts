@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Param, UseInterceptors, UploadedFile, Res, UploadedFiles, UseGuards } from '@nestjs/common';
 import { CatalogService } from './catalog.service';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { AnyFilesInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 // import { extname } from 'path';
 import { CellErrorValue, CellFormulaValue, CellHyperlinkValue, CellRichTextValue, CellSharedFormulaValue, Workbook } from 'exceljs';
@@ -37,11 +37,17 @@ export class CatalogController {
     }
   }
 
+  // https://stackoverflow.com/questions/26079611/node-js-typeerror-path-must-be-absolute-or-specify-root-to-res-sendfile-failed
+  
   @Get(':imagename')
   getImageByName(@Param('imagename') imagename, @Res() res): Observable<object> {
-    // console.log(join('./images', imagename));
+   
+    const upr = imagename.toUpperCase();
+    return of(res.sendFile(join('.catalog/', this.IMAGEFOLDER, upr), { root: '.' }));
+    /*
     const upr = imagename.toUpperCase();
     return of(res.sendFile(join(__dirname + `${this.IMAGEFOLDER}${upr}`)))
+    */
   }
 
   /*
@@ -52,35 +58,35 @@ export class CatalogController {
   }
   */
 
+  // https://stackoverflow.com/questions/71198822/upload-dynamic-multiple-files-in-nest-js
+  @Post('images2dtbase2')
+  @UseInterceptors(AnyFilesInterceptor())
+  uploadimgdb(@UploadedFiles() files: Array<Express.Multer.File>) {
+    const adir = join('.catalog/', this.IMAGEFOLDER);
+    fs.rmSync(adir, { recursive: true, force: true });
+    fs.mkdirSync(adir);
+    let apath = '';
+    files.forEach(async image => {
+      const upr = image.originalname.toUpperCase();
+      apath = join(adir, upr);
+      fs.writeFileSync(apath, image.buffer);
+    })
+    return { status: 200, message: apath }
+  }
+
+
   @Roles('P')
   @UseGuards(RolesGuard)
   @Post('images2dtbase')
   @UseInterceptors(FilesInterceptor('files'))
   uploadFiles(@UploadedFiles() files: Array<Express.Multer.File>) {
-    /*
-    if (!fs.existsSync(join(__dirname + this.IMAGEFOLDER))) fs.mkdirSync(join(__dirname + this.IMAGEFOLDER));
-    */
-
     fs.rmSync(join(__dirname + this.IMAGEFOLDER), { recursive: true, force: true });
     fs.mkdirSync(join(__dirname + this.IMAGEFOLDER));
-
-
     let apath = '';
     files.forEach(async image => {
       const upr = image.originalname.toUpperCase();
       apath = join(__dirname + `${this.IMAGEFOLDER}${upr}`);
       fs.writeFileSync(apath, image.buffer);
-
-      /*
-      if (image.size > 400000) {
-        await sharp(image.buffer)
-        .resize({
-          fit: sharp.fit.contain,
-          width: 600
-      })
-        .toFile(apath);  
-      } else {fs.writeFileSync(apath, image.buffer); }
-      */
     })
     return { status: 200, message: apath }
   }
